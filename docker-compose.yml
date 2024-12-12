@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:14
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  bot:
+    build: .
+    container_name: telegram_bot
+    depends_on:
+      - db
+    environment:
+      API_ID: "YOUR_API_ID"
+      API_HASH: "YOUR_API_HASH"
+      BOT_TOKEN: "YOUR_BOT_TOKEN"
+      DATABASE_URL: "postgresql://postgres:password@db:5432/task_manager"
+
+volumes:
+  postgres_data:
